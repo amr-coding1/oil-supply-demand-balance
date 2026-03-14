@@ -40,10 +40,10 @@ The EIA's Short-Term Energy Outlook (STEO) is the backbone of the model. It's a 
 |--------|-------------|----------------|
 | **EIA STEO** | Full global S/D balance, OPEC/non-OPEC production, demand by region, implied stock change, 18-month forecast | Auto-downloaded, parsed from Excel |
 | **EIA API v2** | US commercial crude oil inventories, weekly, excluding the SPR | Auto-fetched via API (free key required) |
-| **OPEC MOMR** | Country-level OPEC crude production from secondary sources | Manual CSV entry from the Monthly Oil Market Report |
+| **OPEC MOMR** | Country-level OPEC crude production from secondary sources | Manual CSV entry (template pre-filled with STEO estimates) |
 | **IEA OMR** | Non-OPEC supply revisions, demand estimates | Manual CSV entry (the IEA report is paywalled) |
 
-The STEO provides everything needed to run the model out of the box. OPEC and IEA data are optional overrides, plugged in through CSV templates. When present, the model applies a priority cascade: IEA > OPEC > STEO. So if the IEA says non-OPEC supply is 0.3 mb/d higher than the EIA thinks, the model uses the IEA number.
+The STEO provides everything needed to run the model out of the box. OPEC and IEA data are optional overrides, plugged in through CSV templates. When present, the model applies a priority cascade: IEA > OPEC > STEO. So if you enter IEA numbers that differ from the STEO, the model uses the IEA figure for that field. Currently the IEA templates are empty (it's a paywalled source) and the OPEC template is pre-populated with STEO-derived estimates rather than independently sourced MOMR data.
 
 ## Scenario analysis
 
@@ -71,7 +71,7 @@ engine.plot_comparison()     # all scenarios overlaid on one chart
 - `demand_adj` (mb/d): shift global demand forecast
 - `opec_crude_override` (mb/d): set OPEC crude to a specific level instead of adjusting
 
-**Why this matters right now (March 2026):** The STEO forecasts OPEC crude dropping from 29.25 mb/d in February to 23.08 mb/d in March, a 6 mb/d collapse in a single month. That looks like the EIA modelling an aggressive OPEC+ production unwind. Most market participants expect something less dramatic. The "OPEC Holds Cuts" scenario tests what happens if OPEC stays closer to current levels, and it shifts the Q2 balance from deficit to a +4.7 mb/d surplus. That's a completely different trading environment.
+**Why this matters right now (March 2026):** The STEO forecasts OPEC crude dropping from 29.25 mb/d in February to 23.08 mb/d in March, a 6 mb/d collapse in a single month. That looks like the EIA modelling an aggressive OPEC+ production unwind. Most market participants expect something less dramatic. The "OPEC Holds Cuts" scenario tests what happens if OPEC stays closer to current levels, and it shifts the Q2 average balance from roughly flat (+0.7 mb/d) to a clear surplus (+4.7 mb/d). That's a completely different trading environment.
 
 The notebook ships with 5 predefined scenarios (base case + 4 alternatives). You can edit the numbers or add your own.
 
@@ -87,7 +87,7 @@ Everything runs through two Jupyter notebooks, backed by a modular Python codeba
 - Saves everything to `data/processed/`
 
 **Notebook 2: Balance Model** (`02_oil_balance_model.ipynb`)
-- Loads the processed data
+- Parses the STEO workbook directly (with auto-download and caching)
 - Builds the supply table (OPEC crude + NGLs + non-OPEC, with MOMR/OMR overrides if available)
 - Builds the demand table (OECD + non-OECD, with regional breakdowns)
 - Calculates the balance: supply minus demand = implied stock change
