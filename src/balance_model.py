@@ -311,9 +311,10 @@ class OilBalanceModel:
         if "non_opec_supply" in self.supply.columns:
             data["non_opec"] = self.supply.loc[latest_month, "non_opec_supply"]
 
-        # MoM supply change
-        if len(self.supply) >= 2:
-            prev = self.supply["total_world_supply"].iloc[-2]
+        # MoM supply change (relative to the month before latest_month)
+        idx = self.supply.index.get_loc(latest_month)
+        if idx > 0:
+            prev = self.supply["total_world_supply"].iloc[idx - 1]
             data["supply_mom_change"] = data["total_supply"] - prev
 
         # YoY demand

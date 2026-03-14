@@ -49,10 +49,14 @@ class Scenario:
 
 class ScenarioEngine:
     """
-    Run multiple scenarios against the base STEO data and compare results.
+    Run multiple scenarios against the base supply/demand data and compare results.
+
+    Expects a DataFrame with columns: opec_crude, opec_ngls, non_opec_supply,
+    total_world_supply, global_demand. Pass the model's processed data (which
+    includes any OPEC/IEA overrides), not the raw STEO parse.
 
     Usage:
-        engine = ScenarioEngine(steo_data, last_actual_month="2026-02")
+        engine = ScenarioEngine(model_data, last_actual_month="2026-02")
         engine.add_scenario("OPEC Holds Cuts", opec_crude_adj=+4.0)
         engine.add_scenario("China Slowdown", demand_adj=-0.3)
         results = engine.run_all()
@@ -60,8 +64,8 @@ class ScenarioEngine:
         engine.plot_comparison()
     """
 
-    def __init__(self, steo_data: pd.DataFrame, last_actual_month: str):
-        self.steo_data = steo_data.copy()
+    def __init__(self, model_data: pd.DataFrame, last_actual_month: str):
+        self.steo_data = model_data.copy()
         self.last_actual = pd.to_datetime(last_actual_month)
         self.forecast_mask = self.steo_data.index > self.last_actual
         self.scenarios = {}
@@ -93,7 +97,7 @@ class ScenarioEngine:
         )
 
     def _apply_scenario(self, scenario: Scenario) -> pd.DataFrame:
-        """Apply scenario adjustments to a copy of the STEO data. Only forecast months change."""
+        """Apply scenario adjustments to a copy of the base data. Only forecast months change."""
         data = self.steo_data.copy()
         mask = self.forecast_mask
 

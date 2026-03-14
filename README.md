@@ -114,8 +114,7 @@ The model is fully dynamic. It reads the STEO publication date and last historic
 │   ├── commentary.py                  # Jinja2 templated market commentary
 │   └── styling.py                     # color palette and chart theme
 ├── config/
-│   ├── settings.py                    # paths, API config, cache settings
-│   └── series_ids.py                  # EIA series ID mappings, OPEC country list
+│   └── settings.py                    # paths, API config, cache settings
 ├── data/
 │   ├── raw/steo/                      # cached STEO workbook (gitignored)
 │   ├── processed/                     # parsed CSVs and metadata (gitignored)
@@ -181,6 +180,6 @@ Being upfront about what this doesn't do:
 
 - All volumes in mb/d unless stated otherwise. US inventory in million barrels (level).
 - Monthly range: Jan 2023 to Dec 2026 (configurable).
-- The STEO's stock change series (`t3_stchange_world`) uses opposite sign convention (positive = draws in the STEO, positive = builds in our model). Handled internally.
+- The balance is calculated independently as Total Supply minus Total Demand. The STEO publishes its own stock change series but the model doesn't use it.
 - OPEC country-level data from the STEO only covers historical months. Forecast months have NaN for individual countries but the aggregate total is still available.
 - Cache auto-refresh checks file modification time. Older than 7 days triggers a fresh download. Force with `steo.download(force=True)`.

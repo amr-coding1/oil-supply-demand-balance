@@ -42,7 +42,6 @@ SERIES_MAP = {
         "patc_non_oecd":       "non_oecd_demand",        # row 26
         "patc_us":             "us_demand",              # row 23
         "patc_ch":             "china_demand",           # row 27
-        "t3_stchange_world":   "steo_net_withdrawals",  # row 34, NOTE: positive = draw, negative = build (opposite of our balance sign)
     },
     "3btab": {
         "papr_us":             "us_total_liquids",       # US total liquid fuels
