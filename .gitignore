@@ -1,0 +1,23 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Downloaded data (re-fetchable)
+data/raw/
+data/processed/
+
+# Generated output (reproducible)
+output/
+
+# OS
+.DS_Store
+
+# Claude
+.claude/
